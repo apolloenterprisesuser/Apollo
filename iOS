@@ -1,1 +1,22 @@
+- (void)copy:(id)sender {
+    UIPasteboard *gpBoard = [UIPasteboard generalPasteboard];
+    ColorTile *theTile = [self colorTileForOrigin:currentSelection];
+    if (theTile) {
+        NSData *tileData = [NSKeyedArchiver archivedDataWithRootObject:theTile];
+        if (tileData)
+            [gpBoard setData:tileData forPasteboardType:ColorTileUTI];
+    }
+}
+ 
+- (void)cut:(id)sender {
+    [self copy:sender];
+    ColorTile *theTile = [self colorTileForOrigin:currentSelection];
+ 
+    if (theTile) {
+        CGPoint tilePoint = theTile.tileOrigin;
+        [tiles removeObject:theTile];
+        CGRect tileRect = [self rectFromOrigin:tilePoint inset:TILE_INSET];
+        [self setNeedsDisplayInRect:tileRect];
+     }
+}
 
